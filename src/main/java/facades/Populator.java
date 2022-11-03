@@ -14,7 +14,7 @@ import utils.EMF_Creator;
  */
 public class Populator {
     public static void populate(){
-        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
+        //EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
         // Import facade and persist some data into the DB
 
     }
