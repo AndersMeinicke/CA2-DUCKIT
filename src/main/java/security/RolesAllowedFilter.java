@@ -29,7 +29,7 @@ public class RolesAllowedFilter implements ContainerRequestFilter {
     // DenyAll on the method take precedence over RolesAllowed and PermitAll
     if (resourceMethod.isAnnotationPresent(DenyAll.class)) {
        throw new NotAuthorizedException("Resource Not Found");
-      
+      //
     }
 
     // RolesAllowed on the method takes precedence over PermitAll
