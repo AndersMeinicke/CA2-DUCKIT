@@ -26,7 +26,11 @@ public class Utility {
                                     + System.getProperty(obj.toString()) + "}");
             }
     }
-    
+
+    //TODO finish this class when there's a relevant DTO
+
+
+    /*
     public static RenameMeDTO json2DTO(String json) throws UnsupportedEncodingException{
             return gson.fromJson(new String(json.getBytes("UTF8")), RenameMeDTO.class);
     }
@@ -45,6 +49,6 @@ public class Utility {
         
         String backAgain = DTO2json(rmDTO);
         System.out.println(backAgain);
-    }
+    } */
 
 }
