@@ -133,7 +133,8 @@
                     <url>${remote.server}</url>
                     <username>${remote.user}</username>
                     <password>${remote.password}</password>
-                    <update>true</update>    
+                    <update>true</update>
+                    <path>/CA2</path>
                 </configuration>  
             </plugin>          
             
