@@ -134,7 +134,6 @@
                     <username>${remote.user}</username>
                     <password>${remote.password}</password>
                     <update>true</update>
-                    <path>/CA2</path>
                 </configuration>  
             </plugin>          
             
