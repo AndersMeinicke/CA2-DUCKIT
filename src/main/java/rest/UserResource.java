@@ -1,18 +1,18 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dtos.UserDTO;
 import entities.User;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+
+import facades.UserFacade;
 import utils.EMF_Creator;
 
 /**
@@ -22,6 +22,8 @@ import utils.EMF_Creator;
 public class UserResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final UserFacade FACADE =  UserFacade.getUserFacade(EMF);
     @Context
     private UriInfo context;
 
@@ -67,4 +69,37 @@ public class UserResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("addperson")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createUser(String content) {
+        UserDTO userDTO = GSON.fromJson(content, UserDTO.class);
+        UserDTO newUserDTO = FACADE.createUser(userDTO);
+        return Response.ok().entity(GSON.toJson(newUserDTO)).build();
+    }
+    @GET
+    @Path("all")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllUsers() {
+        return Response.ok().entity(GSON.toJson(FACADE.getAllUsers())).build();
+    }
+
+    @GET
+    @Path("user/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserByID(@PathParam("id") long id) {
+        UserDTO userId = FACADE.getUserByID(id);
+        return Response.ok().entity(GSON.toJson(userId)).build();
+    }
+
+    @DELETE
+    @Path("user/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteUser(@PathParam("id") long id) {
+        UserDTO userDeleted = FACADE.deleteUser(id);
+        return Response.ok().entity(GSON.toJson(userDeleted)).build();
+    }
+
 }
