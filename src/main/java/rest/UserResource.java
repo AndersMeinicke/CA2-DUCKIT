@@ -41,7 +41,7 @@ public class UserResource {
         return "{\"msg\":\"Hello anonymous\"}";
     }
 
-    //Just to verify if the database is setup
+    //Just to verify if the database is setupp
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("count")
