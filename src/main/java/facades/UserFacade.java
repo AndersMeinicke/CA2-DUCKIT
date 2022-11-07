@@ -3,10 +3,13 @@ package facades;
 import dtos.UserDTO;
 import entities.Role;
 import entities.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
+import errorhandling.API_Exception;
+import javassist.NotFoundException;
 import security.errorhandling.AuthenticationException;
 
 import java.util.ArrayList;
@@ -24,7 +27,6 @@ public class UserFacade {
     }
 
     /**
-     *
      * @param _emf
      * @return the instance of this facade.
      */
@@ -40,29 +42,29 @@ public class UserFacade {
         return emf.createEntityManager();
     }
 
-    public UserDTO createUser(UserDTO userDTO){
+    public User createUser(User user) {
         EntityManager em = getEntityManager();
-        List<String> roles = new ArrayList<>();
-        roles.add("admin");
-        userDTO.setRoles(roles);
-        User user = new User(userDTO);
-        try{
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
+        Role defaultRole = new Role("user");
+        user.addRole(defaultRole);
+        try {
+            if (em.find(User.class, user.getUserName()) == null) {
+                em.getTransaction().begin();
+                em.persist(user);
+                em.getTransaction().commit();
+            } else throw new Exception("A user with that username already exists");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             em.close();
         }
-        return new UserDTO(user);
+        return user;
     }
 
     public User getVerifiedUser(String username, String password) throws AuthenticationException {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-            TypedQuery<User> query = em.createQuery("select u from User u where u.userName= :username",User.class);
-            query.setParameter("username", username);
-            user = query.getSingleResult();
+            user = em.find(User.class, username);
             if (user == null || !user.verifyPassword(password)) {
                 throw new AuthenticationException("Invalid user name or password");
             }
@@ -72,23 +74,28 @@ public class UserFacade {
         return user;
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers() throws NotFoundException{
         EntityManager em = getEntityManager();
         try {
             TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+            if(query == null){
+                throw new NotFoundException("Can't find any users");
+            }
             List<User> users = query.getResultList();
-
             return UserDTO.getUserDTOs(users);
         } finally {
             em.close();
         }
     }
 
-    public UserDTO getUserByID(Long userId) {
+    public UserDTO getUserByUsername(String userName) throws NotFoundException{
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.id = :id", User.class);
-            query.setParameter("id", userId);
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userName = :userName", User.class);
+            if(query == null) {
+                throw new NotFoundException("Can't find a user with the username: "+userName);
+            }
+            query.setParameter("userName", userName);
 
             User user = query.getSingleResult();
             return new UserDTO(user);
@@ -98,10 +105,15 @@ public class UserFacade {
         }
     }
 
-    public UserDTO deleteUser(long id) {
+    public UserDTO deleteUser(String userName) throws API_Exception {
         EntityManager em = getEntityManager();
-        User user = em.find(User.class, id);
+        User user;
+
         try {
+            user = em.find(User.class, userName);
+            if(user == null) {
+                throw new API_Exception("Can't find a user with the username: "+userName);
+            }
             em.getTransaction().begin();
             em.remove(user);
             em.getTransaction().commit();

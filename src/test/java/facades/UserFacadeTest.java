@@ -2,6 +2,8 @@ package facades;
 
 import dtos.UserDTO;
 import entities.User;
+import errorhandling.API_Exception;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.*;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
@@ -70,18 +72,14 @@ public class UserFacadeTest {
     }
 
     @Test
-    void getAllUsers() {
+    void getAllUsers() throws NotFoundException {
         List<UserDTO> actual = facade.getAllUsers();
         int expected = 2;
         assertEquals(expected,actual.size());
     }
     @Test
     void createUser(){
-        List<String> roles = new ArrayList<>();
-        roles.add("admin");
-        UserDTO userDTO = new UserDTO("Christoffer","test",roles);
-        UserDTO actual = facade.createUser(userDTO);
-        assertEquals(3, facade.getAllUsers().size());
+
 
     }
 
@@ -95,8 +93,8 @@ public class UserFacadeTest {
     }
 
     @Test
-    void deleteUser() {
-        UserDTO userDTO = facade.deleteUser(user2.getId());
+    void deleteUser() throws API_Exception, NotFoundException {
+        UserDTO userDTO = facade.deleteUser(user2.getUserName());
         int expected = 1;
         int actual = facade.getAllUsers().size();
         assertEquals(expected, actual);

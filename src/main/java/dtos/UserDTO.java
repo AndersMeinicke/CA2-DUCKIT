@@ -1,28 +1,26 @@
 package dtos;
 
+import entities.Role;
 import entities.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
-    private Long id;
+
     private String userName;
     private String userPass;
     private List<String> roles;
 
     public UserDTO(User user){
-        this.id = user.getId();
         this.userName = user.getUserName();
         this.userPass = user.getUserPass();
-        this.roles = user.getRolesAsStrings();
+        this.roles = getRoles(user.getRoleList());
     }
-
-    public UserDTO(String userName, String userPass, List<String> roles) {
-        this.userName = userName;
-        this.userPass = userPass;
-        this.roles = roles;
+    public User toUser () {
+        return new User(this.userName, this.userPass);
     }
 
     public static List<UserDTO> getUserDTOs(List<User> users) {
@@ -32,14 +30,25 @@ public class UserDTO {
         });
         return userDTOList;
     }
-
-    public Long getId() {
-        return id;
+    public List<String> getRoles(List<Role> roles){
+        List<String> stringRoles = new ArrayList<>();
+        for (Role role : roles)
+        {
+            stringRoles.add(role.getRoleName());
+        }
+        return stringRoles;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User getEntity(){
+        User user = new User();
+        if(this.userName != null){
+            user.setUserName(this.userName);
+        }
+        user.setUserPass(this.userPass);
+        user.setRoleList(user.getRoleList());
+        return user;
     }
+
 
     public String getUserName() {
         return userName;
@@ -70,19 +79,18 @@ public class UserDTO {
         if (this == o) return true;
         if (!(o instanceof UserDTO)) return false;
         UserDTO userDTO = (UserDTO) o;
-        return getId() == userDTO.getId();
+        return getUserName().equals(userDTO.getUserName()) && getUserPass().equals(userDTO.getUserPass()) && getRoles().equals(userDTO.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(getUserName(), getUserPass(), getRoles());
     }
 
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
+                "userName='" + userName + '\'' +
                 ", userPass='" + userPass + '\'' +
                 ", roles=" + roles +
                 '}';

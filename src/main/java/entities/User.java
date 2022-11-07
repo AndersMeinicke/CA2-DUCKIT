@@ -17,11 +17,6 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "user_id")
-    private Long id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "user_name", length = 25)
@@ -34,7 +29,7 @@ public class User implements Serializable {
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
     public User() {
@@ -45,22 +40,15 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public User(String userName, String userPass, List<Role> roleList) {
+    public User( String userName, String userPass, List<Role> roleList) {
         this.userName = userName;
-        this.userPass = userPass;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
         this.roleList = roleList;
     }
 
     public User(UserDTO userDTO){
-        this.id= userDTO.getId();
         this.userName = userDTO.getUserName();
         this.userPass = userDTO.getUserPass();
-        List<Role> roleList = new ArrayList<>();
-        for (String role : userDTO.getRoles()) {
-            roleList.add(new Role(role));
-
-        }
-        this.roleList = roleList;
     }
 
     public List<String> getRolesAsStrings() {
@@ -78,9 +66,6 @@ public class User implements Serializable {
         return (BCrypt.checkpw(pw, userPass));
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getUserName() {
         return userName;
@@ -95,7 +80,7 @@ public class User implements Serializable {
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
     public List<Role> getRoleList() {
