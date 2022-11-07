@@ -22,7 +22,7 @@ import utils.EMF_Creator;
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("user")
+@Path("info")
 public class UserResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();

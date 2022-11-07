@@ -111,7 +111,7 @@ public class LogInEndPointTest {
 
     @Test
     public void serverIsRunning() {
-        given().when().get("/user").then().statusCode(200);
+        given().when().get("/info").then().statusCode(200);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class LogInEndPointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/user/").then()
+                .get("/info/").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello anonymous"));
     }
@@ -132,7 +132,7 @@ public class LogInEndPointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/admin").then()
+                .get("/info/admin").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to (admin) User: admin"));
     }
@@ -144,7 +144,7 @@ public class LogInEndPointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/user").then()
+                .get("/info/user").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to User: user"));
     }
@@ -156,7 +156,7 @@ public class LogInEndPointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/admin").then() //Call Admin endpoint as user
+                .get("/info/admin").then() //Call Admin endpoint as user
                 .statusCode(401);
     }
 
@@ -167,7 +167,7 @@ public class LogInEndPointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/user").then() //Call User endpoint as Admin
+                .get("/info/user").then() //Call User endpoint as Admin
                 .statusCode(401);
     }
 
@@ -179,7 +179,7 @@ public class LogInEndPointTest {
                 .accept(ContentType.JSON)
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/admin").then()
+                .get("/info/admin").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to (admin) User: user_admin"));
     }
@@ -191,7 +191,7 @@ public class LogInEndPointTest {
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .when()
-                .get("/user/user").then()
+                .get("/info/user").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to User: user_admin"));
     }
@@ -202,7 +202,7 @@ public class LogInEndPointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/user/user").then()
+                .get("/info/user").then()
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
@@ -214,7 +214,7 @@ public class LogInEndPointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("/user/user").then()
+                .get("/info/user").then()
                 .statusCode(403)
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
