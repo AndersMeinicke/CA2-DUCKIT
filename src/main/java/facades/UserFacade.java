@@ -43,13 +43,11 @@ public class UserFacade {
     public UserDTO createUser(UserDTO userDTO){
         EntityManager em = getEntityManager();
         List<String> roles = new ArrayList<>();
-        roles.add("user");
-        User user  = new User(userDTO);
-
-
+        roles.add("admin");
+        userDTO.setRoles(roles);
+        User user = new User(userDTO);
         try{
             em.getTransaction().begin();
-            userDTO.setRoles(roles);
             em.persist(user);
             em.getTransaction().commit();
         } finally {

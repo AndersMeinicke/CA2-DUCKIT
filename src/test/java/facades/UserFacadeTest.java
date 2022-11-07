@@ -75,6 +75,15 @@ public class UserFacadeTest {
         int expected = 2;
         assertEquals(expected,actual.size());
     }
+    @Test
+    void createUser(){
+        List<String> roles = new ArrayList<>();
+        roles.add("admin");
+        UserDTO userDTO = new UserDTO("Christoffer","test",roles);
+        UserDTO actual = facade.createUser(userDTO);
+        assertEquals(3, facade.getAllUsers().size());
+
+    }
 
     @Test
     void getUserById() {
