@@ -20,17 +20,11 @@ import java.util.List;
  * @author lam@cphbusiness.dk
  */
 public class UserFacade {
-
     private static EntityManagerFactory emf;
     private static UserFacade instance;
 
     private UserFacade() {
     }
-
-    /**
-     * @param _emf
-     * @return the instance of this facade.
-     */
     public static UserFacade getUserFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -64,11 +58,8 @@ public class UserFacade {
             TypedQuery<User> query = em.createQuery("select u from User u where u.userName= :username", User.class);
             query.setParameter("username", username);
             user = query.getSingleResult();
-            //old method when userName was id:
-//            user = em.find(User.class, username);
-            //todo: maybe throw different error messages depending on if password or username is wrong
-            if (/*user == null ||*/ !user.verifyPassword(password)) {
-                throw new AuthenticationException("Invalid user name or password");
+            if (!user.verifyPassword(password)) {
+                throw new AuthenticationException("Invalid username or password");
             }
         }catch (NoResultException e) {
             throw new AuthenticationException("Invalid user name or password");
