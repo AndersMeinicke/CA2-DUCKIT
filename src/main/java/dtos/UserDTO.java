@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
-    private Long id;
+    private int id;
     private String userName;
     private String userPass;
     private List<String> roles;
@@ -18,7 +18,7 @@ public class UserDTO {
         this.id = user.getId();
         this.userName = user.getUserName();
         this.userPass = user.getUserPass();
-        this.roles = getRoles(user.getRoleList());
+        this.roles = user.getRolesAsStrings();
     }
     public User toUser () {
         return new User(this.userName, this.userPass);
@@ -31,20 +31,12 @@ public class UserDTO {
         });
         return userDTOList;
     }
-    public List<String> getRoles(List<Role> roles){
-        List<String> stringRoles = new ArrayList<>();
-        for (Role role : roles)
-        {
-            stringRoles.add(role.getRoleName());
-        }
-        return stringRoles;
-    }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -61,7 +53,7 @@ public class UserDTO {
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
     public List<String> getRoles() {
@@ -77,12 +69,12 @@ public class UserDTO {
         if (this == o) return true;
         if (!(o instanceof UserDTO)) return false;
         UserDTO userDTO = (UserDTO) o;
-        return getId().equals(userDTO.getId()) && getUserName().equals(userDTO.getUserName()) && getUserPass().equals(userDTO.getUserPass());
+        return getId() == userDTO.getId() && getUserName().equals(userDTO.getUserName()) && getUserPass().equals(userDTO.getUserPass()) && getRoles().equals(userDTO.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserName(), getUserPass());
+        return Objects.hash(getId(), getUserName(), getUserPass(), getRoles());
     }
 
     @Override

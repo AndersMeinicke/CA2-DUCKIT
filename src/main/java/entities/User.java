@@ -21,7 +21,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     @Column(name = "user_id")
-    private Long id;
+    private int id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "user_name", length = 25)
@@ -34,7 +34,8 @@ public class User implements Serializable {
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+
     private List<Role> roleList = new ArrayList<>();
 
     public User() {
@@ -45,7 +46,7 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public User( Long id, String userName, String userPass, List<Role> roleList) {
+    public User( int id, String userName, String userPass, List<Role> roleList) {
         this.id = id;
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
@@ -73,11 +74,11 @@ public class User implements Serializable {
         return (BCrypt.checkpw(pw, userPass));
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -113,6 +114,19 @@ public class User implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() && getUserName().equals(user.getUserName()) && getUserPass().equals(user.getUserPass()) && getRoleList().equals(user.getRoleList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserName(), getUserPass(), getRoleList());
+    }
+
+    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -122,16 +136,4 @@ public class User implements Serializable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return getId().equals(user.getId()) && getUserName().equals(user.getUserName()) && getUserPass().equals(user.getUserPass());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUserName(), getUserPass());
-    }
 }

@@ -95,7 +95,7 @@ public class UserResource {
     @GET
     @Path("user/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserByID(@PathParam("id") Long id) throws API_Exception {
+    public Response getUserByID(@PathParam("id") int id) throws API_Exception {
         UserDTO userId = FACADE.getUserById(id);
         return Response.ok().entity(GSON.toJson(userId)).build();
     }
@@ -103,22 +103,24 @@ public class UserResource {
     @DELETE
     @Path("user/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deleteUser(@PathParam("id") long id) throws API_Exception {
+    public Response deleteUser(@PathParam("id") int id) throws API_Exception {
         UserDTO userDeleted = FACADE.deleteUser(id);
         return Response.ok().entity(GSON.toJson(userDeleted)).build();
     }
 
     @PUT
-    @Path("user/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editPerson(@PathParam("id") long id, String jsonInput) throws API_Exception {
-        UserDTO userDTO = GSON.fromJson(jsonInput, UserDTO.class);
-        userDTO.setId(id);
-        UserDTO returned = FACADE.updateUser(userDTO);
-        return Response.ok().entity(GSON.toJson(returned)).build();
-
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response updateUser(@PathParam("id") int id, String content) throws API_Exception {
+        UserDTO userDTO = GSON.fromJson(content,UserDTO.class);
+        User user = userDTO.toUser();
+        UserDTO userUpdated = FACADE.updateUser(id,user);
+        return Response.ok().entity(GSON.toJson(userUpdated)).build();
     }
+
+
+
+
 
 
 }

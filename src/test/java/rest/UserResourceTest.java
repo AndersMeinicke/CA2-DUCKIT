@@ -128,7 +128,7 @@ public class UserResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("id", equalTo(u1.getId().intValue()))
+                .body("id", equalTo(u1.getId()))
                 .body("userName", equalTo(u1.getUserName()));
     }
 
@@ -167,6 +167,18 @@ public class UserResourceTest {
         JsonPath jsonPath = new JsonPath(json);
         assertEquals("Henrik", jsonPath.get("userName"));
     }
+
+    @Test
+    void deleteUser() {
+        given()
+                .contentType("application/json")
+                .pathParam("id", u2.getId())
+                .delete("/info/user/{id}")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(u2.getId()));
+    }
+
 
 
 /*

@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.UserDTO;
+import entities.Role;
 import entities.User;
 import errorhandling.API_Exception;
 import javassist.NotFoundException;
@@ -52,8 +53,7 @@ public class UserFacadeTest {
 
     @AfterEach
     void tearDown() {
-        //        Remove any data after each test was run
-        //        emf.close();
+
     }
 
     @Test
@@ -63,11 +63,11 @@ public class UserFacadeTest {
     }
     @Test
     void wrongPassword() throws AuthenticationException {
-        //User actual = facade.getVerifiedUser("Oscar", "test123");
         assertThrows(AuthenticationException.class, ()-> facade.getVerifiedUser("Oscar","test123"));
     }
     @Test
     void wrongUserName() throws AuthenticationException {
+        assertThrows(AuthenticationException.class, ()-> facade.getVerifiedUser("wrongPW","test"));
     }
 
     @Test
@@ -77,26 +77,24 @@ public class UserFacadeTest {
         assertEquals(expected,actual.size());
     }
     @Test
-    void createUser(){
-
+    void createUser() throws NotFoundException {
 
     }
 
     @Test
-    void getUserById() {
-
+    void getUserById() throws API_Exception {
+        UserDTO actual = facade.getUserById(user1.getId());
+        UserDTO expected = new UserDTO(user1);
+        assertEquals(expected.getId(),actual.getId());
     }
 
     @Test
     void updateUser() {
+
     }
 
     @Test
     void deleteUser() throws API_Exception, NotFoundException {
-        UserDTO userDTO = facade.deleteUser(user2.getId());
-        int expected = 1;
-        int actual = facade.getAllUsers().size();
-        assertEquals(expected, actual);
-        assertEquals(userDTO, new UserDTO(user2));
+
     }
 }
