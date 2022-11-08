@@ -95,7 +95,7 @@ public class UserResource {
     @GET
     @Path("user/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserByID(@PathParam("id") long id) throws NotFoundException {
+    public Response getUserByID(@PathParam("id") Long id) throws API_Exception {
         UserDTO userId = FACADE.getUserById(id);
         return Response.ok().entity(GSON.toJson(userId)).build();
     }

@@ -77,12 +77,12 @@ public class UserDTO {
         if (this == o) return true;
         if (!(o instanceof UserDTO)) return false;
         UserDTO userDTO = (UserDTO) o;
-        return getUserName().equals(userDTO.getUserName()) && getUserPass().equals(userDTO.getUserPass()) && getRoles().equals(userDTO.getRoles());
+        return getId().equals(userDTO.getId()) && getUserName().equals(userDTO.getUserName()) && getUserPass().equals(userDTO.getUserPass());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserName(), getUserPass(), getRoles());
+        return Objects.hash(getId(), getUserName(), getUserPass());
     }
 
     @Override

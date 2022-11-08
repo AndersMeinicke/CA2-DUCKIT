@@ -14,7 +14,7 @@ Accept: application/json
 POST http://localhost:8080/api/info/
 Content-Type: application/json
 
-{"userName": "123", "userPass": "123"}
+{"userName": "12321321", "userPass": "1231231231"}
 
 ### Updates a person by his id
 PUT http://localhost:8080/api/info/user/48

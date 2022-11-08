@@ -92,10 +92,17 @@ public class UserFacade {
         }
     }
 
-    public UserDTO getUserById(Long id) {
+    public UserDTO getUserById(Long id) throws API_Exception{
         EntityManager em = getEntityManager();
-        User user = em.find(User.class, id);
-        return new UserDTO(user);
+
+            User user = em.find(User.class, id);
+            if(user == null)
+                throw new API_Exception("There's no user with that id",404);
+            em.close();
+            return new UserDTO(user);
+
+
+
     }
 
     public UserDTO deleteUser(Long id) throws API_Exception {
