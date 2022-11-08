@@ -19,7 +19,7 @@
         <remote.server>https://cphcn332.dk/tomcat/manager/text</remote.server>
 
         <!-- TODO: Add your own database name -->
-        <!-- IMPORTANT-1: The database should exist on your droplet -->
+        <!-- IMPORTANT-1: The database  should exist on your droplet -->
         <db.name>startcode</db.name>
     </properties>
     
