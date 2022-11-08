@@ -101,10 +101,10 @@ public class UserResource {
     }
 
     @DELETE
-    @Path("user/{userName}")
+    @Path("user/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deleteUser(@PathParam("userName") String userName) throws API_Exception {
-        UserDTO userDeleted = FACADE.deleteUser(userName);
+    public Response deleteUser(@PathParam("id") long id) throws API_Exception {
+        UserDTO userDeleted = FACADE.deleteUser(id);
         return Response.ok().entity(GSON.toJson(userDeleted)).build();
     }
 

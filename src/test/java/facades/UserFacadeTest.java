@@ -94,7 +94,7 @@ public class UserFacadeTest {
 
     @Test
     void deleteUser() throws API_Exception, NotFoundException {
-        UserDTO userDTO = facade.deleteUser(user2.getUserName());
+        UserDTO userDTO = facade.deleteUser(user2.getId());
         int expected = 1;
         int actual = facade.getAllUsers().size();
         assertEquals(expected, actual);

@@ -18,6 +18,11 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
+    @Column(name = "user_id")
+    private Long id;
+    @Basic(optional = false)
     @NotNull
     @Column(name = "user_name", length = 25)
     private String userName;
@@ -40,13 +45,15 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public User( String userName, String userPass, List<Role> roleList) {
+    public User( Long id, String userName, String userPass, List<Role> roleList) {
+        this.id = id;
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
         this.roleList = roleList;
     }
 
     public User(UserDTO userDTO){
+        this.id = userDTO.getId();
         this.userName = userDTO.getUserName();
         this.userPass = userDTO.getUserPass();
     }
@@ -66,6 +73,13 @@ public class User implements Serializable {
         return (BCrypt.checkpw(pw, userPass));
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getUserName() {
         return userName;
@@ -95,7 +109,15 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", userPass='" + userPass + '\'' +
+                ", roleList=" + roleList +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -6,6 +6,7 @@ import entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import errorhandling.API_Exception;
@@ -47,13 +48,9 @@ public class UserFacade {
         Role defaultRole = new Role("user");
         user.addRole(defaultRole);
         try {
-            if (em.find(User.class, user.getUserName()) == null) {
                 em.getTransaction().begin();
                 em.persist(user);
                 em.getTransaction().commit();
-            } else throw new Exception("A user with that username already exists");
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             em.close();
         }
@@ -64,10 +61,17 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-            user = em.find(User.class, username);
-            if (user == null || !user.verifyPassword(password)) {
+            TypedQuery<User> query = em.createQuery("select u from User u where u.userName= :username", User.class);
+            query.setParameter("username", username);
+            user = query.getSingleResult();
+            //old method when userName was id:
+//            user = em.find(User.class, username);
+            //todo: maybe throw different error messages depending on if password or username is wrong
+            if (/*user == null ||*/ !user.verifyPassword(password)) {
                 throw new AuthenticationException("Invalid user name or password");
             }
+        }catch (NoResultException e) {
+            throw new AuthenticationException("Invalid user name or password");
         } finally {
             em.close();
         }
@@ -105,14 +109,14 @@ public class UserFacade {
         }
     }
 
-    public UserDTO deleteUser(String userName) throws API_Exception {
+    public UserDTO deleteUser(Long id) throws API_Exception {
         EntityManager em = getEntityManager();
         User user;
 
         try {
-            user = em.find(User.class, userName);
+            user = em.find(User.class, id);
             if(user == null) {
-                throw new API_Exception("Can't find a user with the username: "+userName);
+                throw new API_Exception("Can't find a user with the username: "+id);
             }
             em.getTransaction().begin();
             em.remove(user);

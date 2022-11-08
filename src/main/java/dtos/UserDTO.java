@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
-
+    private Long id;
     private String userName;
     private String userPass;
     private List<String> roles;
 
     public UserDTO(User user){
+        this.id = user.getId();
         this.userName = user.getUserName();
         this.userPass = user.getUserPass();
         this.roles = getRoles(user.getRoleList());
@@ -39,16 +40,13 @@ public class UserDTO {
         return stringRoles;
     }
 
-    public User getEntity(){
-        User user = new User();
-        if(this.userName != null){
-            user.setUserName(this.userName);
-        }
-        user.setUserPass(this.userPass);
-        user.setRoleList(user.getRoleList());
-        return user;
+    public void setId(Long id) {
+        this.id = id;
     }
 
+    public Long getId() {
+        return id;
+    }
 
     public String getUserName() {
         return userName;

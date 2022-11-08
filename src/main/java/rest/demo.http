@@ -1,29 +1,29 @@
 ### Finds all users in the system
-GET http://localhost:8080/api/user/all
+GET http://localhost:8080/api/info/all
 Accept: application/json
 
 ### Finds a user by his username
-GET http://localhost:8080/api/user/chris
+GET http://localhost:8080/api/info/chris123
 Accept: application/json
 
 ### Gets the count of users in the system
-GET http://localhost:8080/api/user/count
+GET http://localhost:8080/api/info/count
 Accept: application/json
 
 ###
-POST http://localhost:8080/api/user
+POST http://localhost:8080/api/info/
 Content-Type: application/json
 
-{"userName": "chris", "userPass": "chris123"}
+{"userName": "chris1234", "userPass": "chris1234"}
 
 ###
-PUT http://localhost:8080/api/user
+PUT http://localhost:8080/api/info/user/chris123
 Content-Type: application/json
 
 {"username": "chrisTest", "userPass": "chrisTest"}
 
 ### Deletes a user by his username
-DELETE http://localhost:8080/api/user/chris
+DELETE http://localhost:8080/api/info/user/5
 Accept: application/json
 
 
