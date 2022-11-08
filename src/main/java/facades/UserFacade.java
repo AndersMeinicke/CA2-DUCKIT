@@ -92,27 +92,15 @@ public class UserFacade {
         }
     }
 
-    public UserDTO getUserByUsername(String userName) throws NotFoundException{
+    public UserDTO getUserById(Long id) {
         EntityManager em = getEntityManager();
-        try {
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userName = :userName", User.class);
-            if(query == null) {
-                throw new NotFoundException("Can't find a user with the username: "+userName);
-            }
-            query.setParameter("userName", userName);
-
-            User user = query.getSingleResult();
-            return new UserDTO(user);
-
-        } finally {
-            em.close();
-        }
+        User user = em.find(User.class, id);
+        return new UserDTO(user);
     }
 
     public UserDTO deleteUser(Long id) throws API_Exception {
         EntityManager em = getEntityManager();
         User user;
-
         try {
             user = em.find(User.class, id);
             if(user == null) {
@@ -125,6 +113,22 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+    public UserDTO updateUser(UserDTO userDTO) throws API_Exception {
+        EntityManager em = getEntityManager();
+        User fromDB = em.find(User.class,userDTO.getId());
+        if(fromDB == null) {
+            throw new API_Exception("No such user with id: " + userDTO.getId());
+        }
+        User userEntity = new User(userDTO.getId(), userDTO.getUserName(), userDTO.getUserPass(),userDTO.toUser().getRoleList());
+        try {
+            em.getTransaction().begin();
+            em.merge(userEntity);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new UserDTO(userEntity);
     }
 
 }

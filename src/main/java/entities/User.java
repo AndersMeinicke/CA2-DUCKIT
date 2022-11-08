@@ -34,7 +34,7 @@ public class User implements Serializable {
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Role> roleList = new ArrayList<>();
 
     public User() {
@@ -107,6 +107,9 @@ public class User implements Serializable {
 
     public void addRole(Role userRole) {
         roleList.add(userRole);
+    }
+    public void removeRole(Role userRole){
+        roleList.remove(userRole);
     }
 
     @Override

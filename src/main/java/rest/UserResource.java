@@ -93,10 +93,10 @@ public class UserResource {
     }
 
     @GET
-    @Path("user/{userName}")
+    @Path("user/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getUserByID(@PathParam("userName") String userName) throws NotFoundException {
-        UserDTO userId = FACADE.getUserByUsername(userName);
+    public Response getUserByID(@PathParam("id") long id) throws NotFoundException {
+        UserDTO userId = FACADE.getUserById(id);
         return Response.ok().entity(GSON.toJson(userId)).build();
     }
 
@@ -106,6 +106,18 @@ public class UserResource {
     public Response deleteUser(@PathParam("id") long id) throws API_Exception {
         UserDTO userDeleted = FACADE.deleteUser(id);
         return Response.ok().entity(GSON.toJson(userDeleted)).build();
+    }
+
+    @PUT
+    @Path("user/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editPerson(@PathParam("id") long id, String jsonInput) throws API_Exception {
+        UserDTO userDTO = GSON.fromJson(jsonInput, UserDTO.class);
+        userDTO.setId(id);
+        UserDTO returned = FACADE.updateUser(userDTO);
+        return Response.ok().entity(GSON.toJson(returned)).build();
+
     }
 
 

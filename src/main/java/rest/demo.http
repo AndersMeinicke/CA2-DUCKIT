@@ -2,28 +2,28 @@
 GET http://localhost:8080/api/info/all
 Accept: application/json
 
-### Finds a user by his username
-GET http://localhost:8080/api/info/chris123
+### Finds a user by his id
+GET http://localhost:8080/api/info/user/6
 Accept: application/json
 
 ### Gets the count of users in the system
 GET http://localhost:8080/api/info/count
 Accept: application/json
 
-###
+### Creates a new person
 POST http://localhost:8080/api/info/
 Content-Type: application/json
 
-{"userName": "chris1234", "userPass": "chris1234"}
+{"userName": "123", "userPass": "123"}
 
-###
-PUT http://localhost:8080/api/info/user/chris123
+### Updates a person by his id
+PUT http://localhost:8080/api/info/user/48
 Content-Type: application/json
 
-{"username": "chrisTest", "userPass": "chrisTest"}
+{"userName": "test", "userPass": "test"}
 
-### Deletes a user by his username
-DELETE http://localhost:8080/api/info/user/5
+### Deletes a user by his id
+DELETE http://localhost:8080/api/info/user/47
 Accept: application/json
 
 
