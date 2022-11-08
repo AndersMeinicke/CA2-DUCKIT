@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
-//Disabled
 public class LogInEndPointTest {
 
     private static final int SERVER_PORT = 7777;
@@ -102,7 +101,7 @@ public class LogInEndPointTest {
                 .when().post("/login")
                 .then()
                 .extract().path("token");
-        //System.out.println("TOKEN --> " + securityToken);
+        //System.out.println("TOKEN -> " + securityToken);
     }
 
     private void logOut() {
