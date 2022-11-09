@@ -8,13 +8,9 @@ import javassist.NotFoundException;
 import org.junit.jupiter.api.*;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
