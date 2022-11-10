@@ -1,0 +1,35 @@
+### Finds all users in the system
+GET http://localhost:8080/api/info/all
+Accept: application/json
+
+### Finds a user by his id
+GET http://localhost:8080/api/info/user/2
+Accept: application/json
+
+### Gets the count of users in the system
+GET http://localhost:8080/api/info/count
+Accept: application/json
+
+### Creates a new person
+POST https://cphcn332.dk/tomcat/BackEnd_CA2/api/info
+Content-Type: application/json
+
+{"userName": "chris", "userPass": "chris"}
+
+### Updates a person by his id
+PUT http://localhost:8080/api/info/6
+Content-Type: application/json
+
+{"userName": "christest", "userPass": "test"}
+
+### Deletes a user by his id
+DELETE http://localhost:8080/api/info/user/34
+Accept: application/json
+
+
+
+
+
+
+
+
