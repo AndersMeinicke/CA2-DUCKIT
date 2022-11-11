@@ -35,9 +35,12 @@ public class User implements Serializable {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
     @ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-
     private List<Role> roleList = new ArrayList<>();
 
+    @Basic
+    @NotNull
+    @Column(name = "user_role", length = 25)
+    private String userRole;
     public User() {
     }
 
@@ -46,11 +49,11 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
-    public User( int id, String userName, String userPass, List<Role> roleList) {
+    public User( int id, String userName, String userPass, String role) {
         this.id = id;
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
-        this.roleList = roleList;
+        this.userRole = role;
     }
 
     public User(UserDTO userDTO){
