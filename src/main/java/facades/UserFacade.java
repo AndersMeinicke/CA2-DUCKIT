@@ -37,8 +37,31 @@ public class UserFacade {
 
     public User createUser(User user) {
         EntityManager em = getEntityManager();
-        Role defaultRole = new Role("user");
-        user.addRole(defaultRole);
+        //user.addRole(defaultRole);
+        if (user.getRoleList().isEmpty()) {
+            Role defaultRole = new Role("user");
+            user.addRole(defaultRole);
+        }
+        try {
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return user;
+    }
+
+    public User createUser(User user, Role role) {
+        EntityManager em = getEntityManager();
+
+        if(role==null){
+            Role defaultRole = new Role("user");
+            user.addRole(defaultRole);
+        }
+        else{
+            user.addRole(role);
+        }
         try {
             em.getTransaction().begin();
             em.persist(user);

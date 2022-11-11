@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.UserDTO;
+import entities.Role;
 import entities.User;
 import errorhandling.API_Exception;
 import facades.UserFacade;
@@ -37,8 +38,10 @@ public class UserResource {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response create(String user) {
         User userTwo =GSON.fromJson(user, User.class);
-        User newUser = FACADE.createUser(userTwo);
+        User burner = new User(userTwo.getUserName(), userTwo.getUserPass(),userTwo.getRoleList());
+        User newUser = FACADE.createUser(burner);
         return Response.ok().entity(GSON.toJson(newUser)).build();
+
     }
     @PUT
     @Path("/{id}")
