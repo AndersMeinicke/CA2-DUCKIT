@@ -1,11 +1,19 @@
-In order for the startcode to work you have to do the following steps:
+for the code to work you have to do the following:
 
-1. Change the JDK version to 11.
-2. Add a configuration - tomcat local version 9. 
-3. Head to your pom.xml file and change the name of the project and its artifact id.
-4. While you're in the pom.xml file you should also change the name of the database to the one you will be using.
-5. Make sure to add your remote secrets to your GitHub project: REMOTE_PW and REMOTE_USER, otherwise you can't deploy the project.
-6. In the mavenworkflow.yml file check that it uses the correct branch main/master.
+1. make sure the JDK is set to version 11.
+
+2. go to edit configurations and add tomcat local server.
+
+3. in the pom.xlm file change the name of the artifactId and the name of the project.
+
+4. in the pom.xml file edit the database name to the name of your database.
+
+5. add your remote secrets to your github repository(REMOTE_USER and REMOTE_PW).
+
+6. check that it uses the correct branch main/master in the mavenworkflow.yml file.
+
 7. Add a mysql datasource with the database you are going to use.
-8. Head to persistence.xml and make sure it uses the correct DB and has the right username and password. 
-9. You can now commit and push and head to GitHub actions, and hopefully it runs with no problems if you followed all the steps above.
+
+8. make sure it uses the correct DB and has the right username and password in persistence.xml. 
+
+9. commit, push and go to GitHub actions.
